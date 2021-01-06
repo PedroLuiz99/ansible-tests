@@ -1,0 +1,40 @@
+---
+# tasks file for create
+- name: Atualizar sistema
+  yum:
+    name: '*'
+    state: latest
+      
+- name: Instalar Epel release
+  yum:
+    name: epel-release
+    state: latest
+
+- name: Baixar Remi Repo
+  get_url: 
+    url: http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    dest: /tmp/
+
+- name: Instalar Remi Repo
+  yum:
+    name: /tmp/remi-release-7.rpm
+    state: present
+        
+- name: Instalar pacotes básicos
+  yum:
+    name:
+    - nginx
+    - joe
+    - telnet
+    - psmisc
+    - git
+    - rsync
+          
+- name: Instalar PHP
+  yum:
+    enablerepo: 'remi,remi-php56'
+    name:
+        - php
+        - php-fpm
+        - php-cli
+        - php-curl
