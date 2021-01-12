@@ -1,0 +1,85 @@
+---
+# tasks file for create
+- name: Atualizar sistema
+  yum:
+    name: '*'
+    state: latest
+      
+- name: Instalar Epel release
+  yum:
+    name: epel-release
+    state: latest
+
+- name: Instalar pacote de Desenvolvimento
+  yum:
+    name: "@Development tools"
+    state: present
+
+- name: Baixar Remi Repo
+  get_url: 
+    url: http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    dest: /tmp/
+
+- name: Instalar Remi Repo
+  yum:
+    name: /tmp/remi-release-7.rpm
+    state: present
+
+- name: Baixar Zabbix Repo
+  get_url: 
+    url: https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm
+    dest: /tmp/
+
+- name: Instalar Zabbix Repo
+  yum:
+    name: /tmp/zabbix-release-5.0-1.el7.noarch.rpm
+    state: present
+        
+- name: Instalar PHP
+  yum:
+    enablerepo: 'remi,remi-php56'
+    name:
+        - php
+        - php-fpm
+        - php-cli
+        - php-curl
+        - php-bz2
+        - php-pdo
+        - php-mbstring
+        - php-pear
+        - php-devel
+        - php-mcrypt
+        - php-mysqlnd
+        - php-xml
+        - php-pecl-redis
+        - php-pecl-xdebug
+        - php-pecl-igbinary
+        - php-process
+        - php-soap
+        - php-common 
+
+- name: Instalar dependências do Harpo Mail
+  yum:
+    name:
+      - nginx
+      - joe
+      - telnet
+      - psmisc
+      - git
+      - curl
+      - rsync
+      - openssh-clients
+      - openssh-server
+      - zabbix-agent
+      - zabbix-sender
+      - postfix
+      - spamassassin
+      - cyrus-sasl
+      - cyrus-sasl-lib
+      - cyrus-sasl-md5
+      - cyrus-sasl-plain
+      - clamav
+      - clamd
+      - clamav-db
+      - dovecot
+      - dovecot-mysql

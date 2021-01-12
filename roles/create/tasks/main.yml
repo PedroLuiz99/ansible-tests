@@ -1,3 +1,4 @@
 ---
 # tasks file for create
-- include: new_instance.yml
+#- include: install_packages.yml
+- include: install_mysql.yml

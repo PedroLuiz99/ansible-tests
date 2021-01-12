@@ -1,0 +1,44 @@
+# - name: Baixando e Descompactando MySQL
+#   unarchive:
+#     src: http://dev.mysql.com/get/Downloads/MySQL-5.1/mysql-5.1.73-linux-x86_64-glibc23.tar.gz
+#     dest: /tmp/
+#     remote_src: yes
+
+# - name: Instalando arquivos
+#   shell: "mv {{ item.key }} {{ item.value }}"
+#   loop: "{{ mvs | dict2items }}"
+#   vars:
+#     mvs:
+#       /tmp/mysql-5.1.73-linux-x86_64-glibc23/bin/mysqld: /usr/libexec/mysqld
+#       /tmp/mysql-5.1.73-linux-x86_64-glibc23/bin/*: /usr/bin/
+#       /tmp/mysql-5.1.73-linux-x86_64-glibc23/lib: /usr/lib64/
+#       /tmp/mysql-5.1.73-linux-x86_64-glibc23/share: /usr/share/mysql
+
+- name: Criando Grupo MySQL
+  group:
+    name: mysql
+
+- name: Criando usuário MySQL
+  user:
+    name: mysql
+    group: mysql
+    create_home: no
+
+- name: Criando diretórios
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: mysql
+    group: mysql
+    mode: 0755
+  loop:
+    - /var/run/mysqld
+    - /var/lib/mysql
+
+- name: Copiando configuração padrão
+  copy:
+    src: etc/my.cnf
+    dest: /etc/my.cnf
+
+- name: Instalando MySQL
+  shell: /tmp/mysql-5.1.73-linux-x86_64-glibc23/scripts/mysql_install_db --defaults-file=/etc/my.cnf --datadir=/var/lib/mysql --basedir=/usr/
